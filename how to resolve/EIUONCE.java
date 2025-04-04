@@ -1,44 +1,46 @@
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 public class EIUONCE {
-    
-    static InputReader reader = new InputReader(System.in);
-    static StringBuilder sb = new StringBuilder();
 
+    static StringBuilder sb = new StringBuilder();  
+    static InputReader rd = new InputReader(System.in);  
     public static void main(String[] args) {
+        int num = rd.nextInt();
 
-        int n = reader.nextInt();
+        for ( int i = 0 ; i < num ; i++ ) {
 
-        for (int i = 0 ; i < n ; i++) {
-            int input = reader.nextInt(); // users input
-			HashMap<Integer, Integer> lstNum = new HashMap<>(); // lưu số lần xuất hiện 
-			for ( int k = 0 ; k < input ; k++) {
-				int key1 = reader.nextInt();
-				lstNum.put (key1 , lstNum.getOrDefault( key1 , 0 ) + 1);
-			} 
-			var keyList = lstNum.keySet(); // trả về các key trong lstNum.
-			
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			
-			for (int keys : keyList) {
-				if (lstNum.get(keys) == 1) {
-					list.add(keys);
-				}
-			}
+            int input = rd.nextInt();
 
-			list.sort(null);
-			for (int num : list ) {
-				System.out.print(num + " ");
-			}
-			System.out.println();
+            HashMap<Integer, Integer> hsMap = new HashMap<>(); // Lưu số lần xuất hiện 
+            
+            for ( int k = 0 ; k < input ; k++ ) {
+                int key1 = rd.nextInt(); 
+                hsMap.put(key1, hsMap.getOrDefault(key1, 0) + 1 );
+            }
+
+            TreeSet<Integer> uniqueNum = new TreeSet<>(); 
+            for ( var entry : hsMap.entrySet() ) {
+                if ( entry.getValue() == 1 ) {
+                    uniqueNum.add(entry.getKey()); 
+                }
+            }
+
+            // Show in uniqueNum
+            for ( var score : uniqueNum ) {
+                sb.append(score + " ");
+            }
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 
     static class InputReader {

@@ -1,92 +1,31 @@
-package baitap;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class EIUTHU {
 
-    static InputReader reader = new InputReader(System.in);
 
     public static void main(String[] args) {
+        
+        Scanner sc = new Scanner(System.in);
+        
+        String part1 = sc.next();
+        String part2 = sc.next(); 
 
-        String firstPart = reader.next();
-        String secondPart = reader.next();
-        int index = 0;
+        // Tìm phần cuối của part 1 and đầu part 2 
+        int maxOverLap = 0 ;    // kí tự bị trùng
 
-        for (int i = 1; i <= firstPart.length(); i++) {
-            if (secondPart.charAt(0) == firstPart.charAt(firstPart.length() - i)) {
-                if (check(firstPart, secondPart, index) != 0) {
-                    index = i;
-                }
+        for ( int i = 1 ; i <= part1.length() ; i++ ) {
+            String suffix = part1.substring( part1.length() - i); // kí tự cuối 
 
-            }
-
-        }
-        System.out.println(firstPart.length() + secondPart.length() - index);
-    }
-
-    public static int check(String firstPart, String secondPart, int index) {
-        int j;
-        for (j = 1; index > 0; j++) {
-            if (secondPart.charAt(j) == firstPart.charAt(firstPart.length() - index)) {
-                index--;
-            } else {
-                return 0;
+            if ( part2.startsWith(suffix) ) {
+                maxOverLap = i ; 
             }
         }
-        return j ;
 
-    }
+        int result = part1.length() + part2.length() - maxOverLap ; 
 
-    static class InputReader {
-        StringTokenizer tokenizer;
-        BufferedReader reader;
-        String token;
-        String temp;
+        System.out.println(result);
 
-        public InputReader(InputStream stream) {
-            tokenizer = null;
-            reader = new BufferedReader(new InputStreamReader(stream));
-        }
 
-        public InputReader(FileInputStream stream) {
-            tokenizer = null;
-            reader = new BufferedReader(new InputStreamReader(stream));
-        }
-
-        public String nextLine() throws IOException {
-            return reader.readLine();
-        }
-
-        public String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    if (temp != null) {
-                        tokenizer = new StringTokenizer(temp);
-                        temp = null;
-                    } else {
-                        tokenizer = new StringTokenizer(reader.readLine());
-                    }
-                } catch (IOException e) {
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        public double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        public int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        public long nextLong() {
-            return Long.parseLong(next());
-        }
+        sc.close();
     }
 }

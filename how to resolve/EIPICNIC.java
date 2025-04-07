@@ -1,101 +1,43 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class EIPICNIC {
 
-	static InputReader reader = new InputReader(System.in);
-	static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+    static StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) {
+        
+        Scanner sc = new Scanner(System.in);
 
-		int n = reader.nextInt();
-		int[] arrCar = new int[] {0 , 0 , 0 , 0 , 0}; // khởi tạo 5 phần tử 
-		
-		for (int i = 0 ; i < n ; i++) {
-			int group = reader.nextInt();
-			arrCar[group]++;
-		}
-		
-		int CarNum = 0 ; 
-		CarNum += arrCar[4]; // chở tối đa 4 người 
-		
-		if (arrCar[3] - arrCar[1] >= 0) { // xử lí nhóm xe 3
-			CarNum += arrCar[3] ; 
-			arrCar[1] = 0 ;
-		} else {
-			arrCar[1] = arrCar[1] - arrCar[3] ;
-			CarNum += arrCar[3];
-		}
-		
-		CarNum += arrCar[2] / 2 ; // xử li nhóm 2 xe 
-		if (arrCar[2] % 2 != 0 ) {
-			arrCar[2] = 1 ;
-		} else 
-			arrCar[2] = 0 ; 
-		
-		CarNum += arrCar[1] / 4; // nhom xe 1 ng
-		arrCar[1] = arrCar[1] % 4 ; 
-		
-		CarNum += ( arrCar[1] + arrCar[2] * 2) / 4 ; // tìm số lượng xe cần thiết
-		arrCar[1] = ( arrCar[1] + arrCar[2] * 2 ) % 4 ; 
-		if (arrCar[1] != 0 ) {
-			CarNum++;
-		}
-		System.out.println(CarNum);
-		
-				
-	}
+        int num = sc.nextInt();
 
-	static class InputReader {
-		StringTokenizer tokenizer;
-		BufferedReader reader;
-		String token;
-		String temp;
+        int[] groupCount = new int[5];
 
-		public InputReader(InputStream stream) {
-			tokenizer = null;
-			reader = new BufferedReader(new InputStreamReader(stream));
-		}
+        for (int i = 0; i < num ; i++) {
+            int size = sc.nextInt();
+            groupCount[size]++;
+        }
 
-		public InputReader(FileInputStream stream) {
-			tokenizer = null;
-			reader = new BufferedReader(new InputStreamReader(stream));
-		}
+        int totalCars = 0 ; 
 
-		public String nextLine() throws IOException {
-			return reader.readLine();
-		}
+        // Group 4 ng 
+        totalCars += groupCount[4] ; 
 
-		public String next() {
-			while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-				try {
-					if (temp != null) {
-						tokenizer = new StringTokenizer(temp);
-						temp = null;
-					} else {
-						tokenizer = new StringTokenizer(reader.readLine());
-					}
-				} catch (IOException e) {
-				}
-			}
-			return tokenizer.nextToken();
-		}
+        // Group 3 ng 
+        totalCars += groupCount[3] ; 
+        groupCount[1] = Math.max(0, groupCount[1] - groupCount[3]);
 
-		public double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        // Group 2 ng
+        totalCars += groupCount[2] / 2 ;
+        groupCount[2] %= 2 ; 
 
-		public int nextInt() {
-			return Integer.parseInt(next());
-		}
+        // Group 1 ng 
+        if ( groupCount[2] == 1 ) {
+            totalCars += 1 ; 
+            groupCount[1] = Math.max(0, groupCount[1] - 2 );
+        }
 
-		public long nextLong() {
-			return Long.parseLong(next());
-		}
-	}
+        // Group các nhóm 1 ng còn lại 
+        totalCars += (groupCount[1] + 3) / 4;
+
+        System.out.println(totalCars);
+    }
 }

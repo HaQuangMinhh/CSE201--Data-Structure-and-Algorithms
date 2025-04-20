@@ -1,119 +1,64 @@
-package baitap;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Map;
+import java.util.Scanner;
 
 public class EIUSLS {
-    
-    static InputReader reader = new InputReader(System.in);
+
     static StringBuilder sb = new StringBuilder();
+    
     public static void main(String[] args) {
-        int n = reader.nextInt(); // số lượng sinh viên 
+        Scanner sc = new Scanner(System.in);
+        List<Student> students = new ArrayList<>();
         
-        List<Student> students = new ArrayList<>(); // Create a list of Array to hold Student Objects
+        int testcases = sc.nextInt();
 
-        for ( int i = 0 ; i < n ; i++) {
-            String name = reader.next();
-            int NumCourses = reader.nextInt(); // number of courses
-            int TotalScore = 0 ;
-
-            for (int j = 0 ; j < NumCourses ; j++ ) {
-                TotalScore += reader.nextInt(); // sum up the scores of all courses 
-            }
-            double averageScore = (double) TotalScore / NumCourses ; // 
-            students.add(new Student(name, averageScore)); // add to the students 
-
-        }
-        students.sort((a,b) -> Double.compare(b.getAverageScore(), a.getAverageScore() )); // Sorted the list of students 
-
-        System.out.println(students.get(0).getName() ); //  Print out the student with the highest scores   
-
-        if (students.size() > 1 ) {   // giải quyết nhiều students có the same second-highest score. 
-            double secondHighestScore = students.get(1).getAverageScore();
+        for ( int i = 0 ; i < testcases ; i++ ) {
+            String name = sc.next(); 
+            int codeSub = sc.nextInt();
             
-            int i = 1;          
-            while ( i < students.size() && students.get(i).getAverageScore() == secondHighestScore) {
-                i++;
-            }
+            Student person = new Student(name);
 
-            for (int j = 1 ; j < i ; j++) {
-                System.out.println(students.get(j).getName()   );
-                break;
+            for ( int k = 0 ; k < codeSub ; k++ ) {
+                person.addScore(sc.nextDouble());
             }
+            students.add(person);
         }
-        
-        
+
+        students.sort( (s1, s2) -> {
+            int compare = Double.compare(s2.avg, s1.avg);
+            return compare;
+        }); 
+
+        int i = 0 ;
+        int k = 0 ; 
+
+        for ( ; i < 2 && k < testcases ; i++, k++ ) {
+            sb.append(students.get(i).name).append("\n");
+        }
+
+        System.out.println(sb);
+
     }
+
     static class Student {
         private String name ; 
-        private double averageScore ; 
-        
-        public Student (String name , double averageScore) {
+        private int order ; // thứ tự nhập 
+
+        private double totalGrade = 0 ; 
+        private int count ;
+        private double avg ; 
+
+        public Student ( String name ) {
             this.name = name ; 
-            this.averageScore = averageScore ; 
         }
-
-        public String getName() {
-            return name;
-        }
-
-        public double getAverageScore() {
-            return averageScore;
+        
+        public void addScore ( double score ) {
+            totalGrade += score ;
+            count++; 
+            avg = totalGrade / count ; 
         }
     }
 
-
-    static class InputReader {
-        StringTokenizer tokenizer;
-        BufferedReader reader;
-        String token;
-        String temp;
-
-        public InputReader(InputStream stream) {
-            tokenizer = null;
-            reader = new BufferedReader(new InputStreamReader(stream));
-        }
-
-        public InputReader(FileInputStream stream) {
-            tokenizer = null;
-            reader = new BufferedReader(new InputStreamReader(stream));
-        }
-
-        public String nextLine() throws IOException {
-            return reader.readLine();
-        }
-
-        public String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    if (temp != null) {
-                        tokenizer = new StringTokenizer(temp);
-                        temp = null;
-                    } else {
-                        tokenizer = new StringTokenizer(reader.readLine());
-                    }
-                } catch (IOException e) {
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        public double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        public int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        public long nextLong() {
-            return Long.parseLong(next());
-        }
-    }
 }
